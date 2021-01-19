@@ -1,0 +1,47 @@
+Matt Luettgen
+Final Project domain specific term extraction documentation. 
+Note that all of the filepaths are inaccurate because I had to move everything around to go in the .zip
+InitialResults.java
+	-first version I programmed with bigrams and trigrams. no longer in use. 
+	-to run, in main, set testing subreddit
+	-write inverted index with source path and out path
+	-call analyze. 
+MultiWordExpressionTokenizer.py
+	despite itss name, also tokenizes unigrams for the project. 
+	-reads the subreddits in json format with read_json and read_jsonl
+	-peforms chunking by
+		1. tokenizing sentences with nltk sentence tokenizer. 
+		2. finding np's (which can actually be "PRON," "PROPN", "NOUN" "NUM"
+		3. tokenizing the subtree
+		4. tokenizing the noun with all phrases left in the subtree, then decreasing the phrases until the noun. 
+		5. tokenizing the noun with all phrases right in the subtree, then decreasing the phrases until the noun. 
+		6. removes all stopwords (with nltk stopwords as a base and some I added). 
+	-performs tokeization of unigrams with nltk word tokenizer. 
+	-finds frequencies, puts it in dict then writes to file (subreddit_multigram_frequencies)
+	-combinedCorporta() does this for both testing and base corpora. 
+	-singleTestCorpus() is if you want to add an extra corpora. 
+FindDSTs.java finds DomainSpecificTerms using tfidf. 
+	(ok so basically I used java in other courses this semester and I needed to code fast and I became slow with python so java).  
+	-global variable FILEPATH specifies where you are reading and writing files. 
+	-global variable TESTCORPUS is the test corpus you are using. 
+	-readFrequencyFile reads file written by MultiwordExpressionTokenizer.py and returns hashmap of frequencies. 
+		-readTestFile() does this for just test corpus
+		-readBaseFiles() does this for all the base corpora. 
+	-getLength() returns the length of a subreddit. 
+		-getLengths() lengths does this for multiple (for the base corpora)
+	-getTestTFIDFs()
+		- calculculates the tf-idf of every term in the test corpus. 
+		- (due to an error stopword "_'s" weren't deleted in the python code so that's removed here. 
+	TermResult.java
+		simple instantiable class containing tf-idf and term name that's able to be easily sorted. 
+	findMean() and findStandardDeviation() find mean and sd of ArrayList of TermResult to do threshold. 
+	Analyze()
+		calls getTestTFIDFS and does the threshold, then calls writeEvaluation() and writeResults() to write files. 
+			writeEvaluation() writes the file to be manually evaluated by marking domain-specific terms 1 and non-domain-specific terms 0. 
+			writeResults() writes the term, the tf, the idf, and the tf-idf to see these numerical values. 
+FindPrecision.py
+	finds precision of evaluation files and prints the results at various level
+		evaluatePrecision(FILEPATH + "IndianaUniversity_colleges_evaluation_save2.txt"), for example. 
+
+License is included in the folder too because they said I had to. 
+	
